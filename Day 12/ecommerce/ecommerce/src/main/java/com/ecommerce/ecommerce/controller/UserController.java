@@ -32,4 +32,20 @@ public class UserController {
         log.info("/api/api/v1/user fro POST is execute...");
         return userService.update(dto);
     }
+
+    @SneakyThrows(Exception.class)
+    @GetMapping(path = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> get(Long id)
+    {
+        log.info("/api/api/v1/user fro POST is execute...");
+        return userService.getUser(id);
+    }
+
+    @SneakyThrows(Exception.class)
+    @DeleteMapping(path = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> delete(Long id)
+    {
+        log.info("/api/api/v1/user fro POST is execute...");
+        return userService.deleteUser(id);
+    }
 }
