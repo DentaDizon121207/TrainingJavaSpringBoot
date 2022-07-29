@@ -52,7 +52,7 @@ public class UserService {
 
         Map<String, Object> res = new HashMap<String, Object>();
 
-        User user = new User();
+        User user = userRepository.findById(dto.getId()).orElse(null);
         if(Optional.ofNullable(user).isPresent())
         {
             user.setUsername(dto.getUsername().trim());
@@ -78,16 +78,18 @@ public class UserService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Map<String, Object> res = new HashMap<String, Object>();
-        User user = new User();
-        user.getId();
-        userRepository.findById(id);
+        GetUserDto getDto = new GetUserDto();
+        List<GetUserDto> ListGTO = new ArrayList<GetUserDto>();
+        User user = userRepository.findById(id).orElse(null);
 
-        res.put("code", "200");
-        res.put("message", "success");
-        res.put("data",userRepository);
+        getDto.setId(user.getId());
+        getDto.setUsername(user.getUsername().trim());
+        getDto.setPhone(user.getPhone().trim());
+        getDto.setAddress(user.getAddress().trim());
+        ListGTO.add(getDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(res);
+        return ResponseEntity.status(HttpStatus.OK).body(ListGTO);
+
     }
 
     @DeleteMapping("/users")
@@ -97,11 +99,13 @@ public class UserService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> res = new HashMap<>();
+        User user = userRepository.findById(id).orElse(null);
+        userRepository.delete(user);
+        userRepository.deleteById(id);
 
         res.put("code", 200);
-        res.put("message", "success");
-        res.put("data", "Hello world deleted");
-
+        res.put("message", "delete success");
+        res.put("data", user);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(res);
     }
 
