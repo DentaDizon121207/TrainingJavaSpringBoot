@@ -82,11 +82,17 @@ public class UserService {
         List<GetUserDto> ListGTO = new ArrayList<GetUserDto>();
         User user = userRepository.findById(id).orElse(null);
 
-        getDto.setId(user.getId());
-        getDto.setUsername(user.getUsername().trim());
-        getDto.setPhone(user.getPhone().trim());
-        getDto.setAddress(user.getAddress().trim());
-        ListGTO.add(getDto);
+        if(Optional.ofNullable(user).isPresent()) {
+            getDto.setId(user.getId());
+            getDto.setUsername(user.getUsername().trim());
+            getDto.setPhone(user.getPhone().trim());
+            getDto.setAddress(user.getAddress().trim());
+            ListGTO.add(getDto);
+        }
+        else {
+            ErrorResponse err = new ErrorResponse("9999","data not found");
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(err);
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(ListGTO);
 
@@ -100,8 +106,15 @@ public class UserService {
 
         Map<String, Object> res = new HashMap<>();
         User user = userRepository.findById(id).orElse(null);
-        userRepository.delete(user);
-        userRepository.deleteById(id);
+        //userRepository.delete(user);
+        if(Optional.ofNullable(user).isPresent())
+        {
+            userRepository.deleteById(user.getId());
+        }
+        else {
+            ErrorResponse err = new ErrorResponse("9999","data not found");
+            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(err);
+        }
 
         res.put("code", 200);
         res.put("message", "delete success");
