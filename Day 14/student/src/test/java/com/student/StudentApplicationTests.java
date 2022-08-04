@@ -2,11 +2,13 @@ package com.student;
 
 import com.student.model.Student;
 import com.student.repository.StudentRepository;
+import com.ulisesbocchio.jasyptspringboot.configuration.EnableEncryptablePropertiesConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-
+@Import(EnableEncryptablePropertiesConfiguration.class)
 class StudentApplicationTests {
     @Autowired
     private StudentRepository studentRepository;
@@ -38,9 +40,9 @@ class StudentApplicationTests {
     @Test
     public void testGetStudent() {
 
-        Student res = studentRepository.findByStudentName("Denny");
+        Student res = studentRepository.findByStudentName("Denny Muharom");
 
-        assertEquals("Denny", res.getStudentName().trim());
+        assertEquals("Denny Muharom", res.getStudentName().trim());
     }
     @Test
     public void testGetStudents() {
@@ -52,7 +54,7 @@ class StudentApplicationTests {
     @Test
     public void testUpdateStudent() {
 
-        Student student = studentRepository.findByStudentName("Denny");
+        Student student = studentRepository.findByStudentName("Denny Muharom");
 
         student.setStudentName("Aleandra");
         student.setGender('F');
@@ -68,11 +70,11 @@ class StudentApplicationTests {
     @Test
     public void testDeleteStudent() {
 
-        Student student = studentRepository.findByStudentName("Denny");
+        Student student = studentRepository.findByStudentName("Denny Muharom");
 
         studentRepository.delete(student);
 
-        assertNull(studentRepository.findByStudentName("Denny"));
+        assertNull(studentRepository.findByStudentName("Denny Muharom"));
     }
 
 }
